@@ -10,9 +10,12 @@ describe('index', () => {
 
   describe('callback functions', () => {
     describe('displayCommits', () => {
+
       it('parses and displays json values', () => {
         var resp = { responseText: commitsData() }
+        debugger
         displayCommits.call(resp)
+
         el = document.getElementById("details")
         expect(el.innerHTML).toMatch(/Monalisa Octocat/)
         expect(el.innerHTML).toMatch(/octocat/)
