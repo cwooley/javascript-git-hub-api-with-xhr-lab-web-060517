@@ -3,7 +3,7 @@ $('document').ready( ()=> {
 })
 
 function getRepositories(event){
-  event.preventDefault();
+  // event.preventDefault();
   username = $('#username').val();
   const req = new XMLHttpRequest()
   req.addEventListener('load', displayRepositories)
@@ -19,7 +19,7 @@ function handleJSON(){
 
 function makeRepoHTML(respObj){
   let lies = respObj.map((repo)=>{
-    debugger
+    // debugger
     // return repo.url
     return '<li>' + repo.full_name + ' - <a href="#" data-repo="' + repo.name + '"data-username="' + repo.full_name.split('/')[0] + '" onclick="getCommits(this)">Get Commits</a></li>'
   }).join(' ')
@@ -39,7 +39,8 @@ function displayRepositories(){
 
 
 function getCommits(repoEl) {
-  const repoName = repoEl.dataset.repo
+  // debugger
+  const repoName = repoEl.dataset.repository
   const userName = repoEl.dataset.username
   const req = new XMLHttpRequest()
   req.addEventListener("load", displayCommits)
@@ -47,17 +48,35 @@ function getCommits(repoEl) {
   req.send()
 }
 
+
 function makeCommitHTML(respObj){
   let lies = respObj.map((commit) => {
-    return `<li><strong> ${commit.commit.author.name} </strong> - ${commit.commit.message} </li>`
+    // debugger
+    return `${commit.commit.author.name} ${commit.author.login} ${commit.commit.message}`
+    // return `<li><strong> ${commit.commit.author.name} </strong> - ${commit.commit.message} </li>`
   }).join('')
   let HTML = `<ul> ${lies} </ul>`
-  return HTML
+  return lies
 }
 
 
 function displayCommits(){
   HTML = makeCommitHTML(handleJSON.call(this))
+  $('#details').empty()
+  $('#details').append(HTML)
+}
+
+function getBranches() {
+  const req = new XMLHttpRequest()
+  req.addEventListener("load", displayCommits)
+  req.open("GET", 'https://api.github.com/repos/octocat/test-repo/branches')
+  req.send()
+
+
+}
+
+function displayBranches(){
+  HTML = 'master'
   $('#details').empty()
   $('#details').append(HTML)
 }
